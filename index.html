@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customized Nutrition Planner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 { color: #4CAF50; }
+        section {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+        label {
+            display: block;
+            margin: 8px 0 4px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <h1>Personalized Nutrition Planner</h1>
+
+    <!-- User Profile Form -->
+    <section id="user-profile">
+        <h2>Enter Your Details</h2>
+        <form id="profile-form">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="weight">Weight (lbs):</label>
+            <input type="number" id="weight" name="weight" required>
+
+            <label for="height-feet">Height (ft):</label>
+            <input type="number" id="height-feet" name="height-feet" required>
+
+            <label for="height-inches">Height (in):</label>
+            <input type="number" id="height-inches" name="height-inches" required>
+
+            <label for="activity-level">Activity Level:</label>
+            <select id="activity-level" name="activity-level" required>
+                <option value="1.2">Sedentary</option>
+                <option value="1.375">Lightly Active</option>
+                <option value="1.55">Moderately Active</option>
+                <option value="1.725">Very Active</option>
+                <option value="1.9">Super Active</option>
+            </select>
+
+            <label for="goal">Goal:</label>
+            <select id="goal" name="goal" required>
+                <option value="deficit">Weight Loss</option>
+                <option value="maintain">Maintenance</option>
+                <option value="surplus">Muscle Gain</option>
+            </select>
+
+            <button type="button" onclick="calculateNeeds()">Calculate Needs</button>
+        </form>
+    </section>
+
+    <!-- Daily Needs Display -->
+    <section id="daily-needs" style="display: none;">
+        <h2>Your Daily Needs</h2>
+        <p>Calories: <span id="calories"></span> kcal</p>
+        <p>Protein: <span id="protein"></span> g</p>
+        <p>Carbohydrates: <span id="carbs"></span> g</p>
+        <p>Fats: <span id="fats"></span> g</p>
+        <button onclick="generateMealPlan()">Generate Meal Plan</button>
+    </section>
+
+    <!-- Meal Plan Display -->
+    <section id="meal-plan" style="display: none;">
+        <h2>Suggested Meal Plan</h2>
+        <ul id="meal-list"></ul>
+        <p>Total Estimated Cost: $<span id="total-cost"></span></p>
+    </section>
+
+    <script>
+        function calculateNeeds() {
+            const age = document.getElementById("age").value;
+            const weight = document.getElementById("weight").value;
+            const heightFeet = document.getElementById("height-feet").value;
+            const heightInches = document.getElementById("height-inches").value;
+            const activityLevel = document.getElementById("activity-level").value;
+            const goal = document.getElementById("goal").value;
+
+            // Sample calculation (basic example, replace with your formula)
+            let calories = weight * 15; // Placeholder logic for demo
+            if (goal === "deficit") calories -= 500;
+            else if (goal === "surplus") calories += 500;
+
+            document.getElementById("calories").textContent = calories;
+            document.getElementById("protein").textContent = (weight * 0.8).toFixed(1);
+            document.getElementById("carbs").textContent = (calories * 0.5 / 4).toFixed(1);
+            document.getElementById("fats").textContent = (calories * 0.2 / 9).toFixed(1);
+
+            document.getElementById("daily-needs").style.display = "block";
+        }
+
+        function generateMealPlan() {
+    const targetCalories = parseFloat(document.getElementById("calories").textContent);
+    const mealList = document.getElementById("meal-list");
+    mealList.innerHTML = ""; // Clear previous meals
+
+    // Sample meal data, replace or expand with your meal bank
+    const meals = [
+    { name: "Oatmeal with Berries", calories: 300, protein: 10, carbs: 50, fats: 5, price: 2.5 },
+        { name: "Chicken Salad", calories: 400, protein: 30, carbs: 10, fats: 20, price: 5.0 },
+        { name: "Grilled Salmon", calories: 500, protein: 40, carbs: 10, fats: 25, price: 7.0 },
+        { name: "Protein Smoothie", calories: 250, protein: 20, carbs: 30, fats: 5, price: 2.5 },
+        { name: "Veggie Stir Fry", calories: 350, protein: 15, carbs: 45, fats: 10, price: 3.5 },
+        { name: "Greek Yogurt and Nuts", calories: 200, protein: 15, carbs: 20, fats: 10, price: 2.0 },
+        { name: "Quinoa and Black Beans", calories: 300, protein: 15, carbs: 50, fats: 10, price: 3.0 },
+        { name: "Turkey Wrap", calories: 400, protein: 25, carbs: 30, fats: 15, price: 4.5 },
+        { name: "Eggs and Avocado Toast", calories: 350, protein: 15, carbs: 30, fats: 20, price: 3.0 },
+        { name: "Beef Stir Fry", calories: 450, protein: 35, carbs: 30, fats: 15, price: 5.5 },
+        { name: "Tofu and Veggies", calories: 300, protein: 20, carbs: 35, fats: 10, price: 2.5 },
+        { name: "Chicken and Sweet Potato", calories: 400, protein: 30, carbs: 40, fats: 10, price: 4.0 },
+        { name: "Lentil Soup", calories: 250, protein: 15, carbs: 30, fats: 5, price: 2.0 },
+        { name: "Shrimp and Rice", calories: 400, protein: 35, carbs: 45, fats: 5, price: 6.0 },
+        { name: "Veggie Wrap", calories: 300, protein: 10, carbs: 40, fats: 10, price: 3.0 },
+        { name: "Stuffed Bell Peppers", calories: 350, protein: 25, carbs: 30, fats: 15, price: 4.5 },
+        { name: "Cottage Cheese and Fruit", calories: 200, protein: 15, carbs: 20, fats: 5, price: 1.5 },
+        { name: "Baked Cod and Asparagus", calories: 400, protein: 30, carbs: 15, fats: 10, price: 5.0 },
+        { name: "Egg White Omelette", calories: 150, protein: 15, carbs: 5, fats: 5, price: 1.0 },
+        { name: "Salmon Salad", calories: 300, protein: 25, carbs: 10, fats: 20, price: 6.0 }
+    ];
+
+    let totalCalories = 0;
+    let totalPrice = 0;
+
+    // Accumulate meals until reaching close to targetCalories
+    while (totalCalories < targetCalories) {
+        for (let meal of meals) {
+            if (totalCalories + meal.calories <= targetCalories) {
+                totalCalories += meal.calories;
+                totalPrice += meal.price;
+
+                // Add meal to the list
+                let li = document.createElement("li");
+                li.textContent = `${meal.name} - ${meal.calories} kcal, ${meal.protein}g protein, ${meal.carbs}g carbs, ${meal.fats}g fats - $${meal.price}`;
+                mealList.appendChild(li);
+
+                // Break if we reach or exceed the target after adding a meal
+                if (totalCalories >= targetCalories) break;
+            }
+        }
+    }
+
+    // Update total cost
+    document.getElementById("total-cost").textContent = totalPrice.toFixed(2);
+    document.getElementById("meal-plan").style.display = "block";
+}
+
+    </script>
+</body>
+</html>
